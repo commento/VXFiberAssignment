@@ -5,7 +5,7 @@ import json
 
 # function to convert orders to a dictionary of objects
 # if an object is present twice it is considered the most recent order
-def ordersToObjectsConverter(d):
+def convertOrdersToObjects(d):
     objects = {}
     for elem in d["data"]:
         if elem["object"] not in objects:
@@ -39,8 +39,8 @@ objectsEnd = {}
 missingObjs = 0
 
 
-objectsStart = ordersToObjectsConverter(d1)
-objectsEnd = ordersToObjectsConverter(d2)
+objectsStart = convertOrdersToObjects(d1)
+objectsEnd = convertOrdersToObjects(d2)
 
 
 for objectId in objectsStart.keys():

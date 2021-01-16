@@ -14,6 +14,8 @@ def ordersToObjectsConverter(d):
 		elif objects[elem["object"]]["service_provider"] != elem["service_provider"]:
 			if objects[elem["object"]]["activated_date"] < elem["activated_date"]:
 				objects[elem["object"]]["service_provider"] = elem["service_provider"]
+				objects[elem["object"]]["activated_date"] = elem["activated_date"]
+				objects[elem["object"]]["terminated_date"] = elem["terminated_date"]
 	return objects
 
 

@@ -1,4 +1,3 @@
-
 import sys
 import requests
 import json
@@ -7,16 +6,20 @@ import json
 # function to convert orders to a dictionary of objects
 # if an object is present twice it is considered the most recent order
 def ordersToObjectsConverter(d):
-	objects = {}
-	for elem in d["data"]:
-		if elem["object"] not in objects:
-			objects[elem["object"]] = {"activated_date":elem["activated_date"], "terminated_date":elem["terminated_date"], "service_provider":elem["service_provider"]}
-		elif objects[elem["object"]]["service_provider"] != elem["service_provider"]:
-			if objects[elem["object"]]["activated_date"] < elem["activated_date"]:
-				objects[elem["object"]]["service_provider"] = elem["service_provider"]
-				objects[elem["object"]]["activated_date"] = elem["activated_date"]
-				objects[elem["object"]]["terminated_date"] = elem["terminated_date"]
-	return objects
+    objects = {}
+    for elem in d["data"]:
+        if elem["object"] not in objects:
+            objects[elem["object"]] = {
+                "activated_date": elem["activated_date"], 
+                "terminated_date": elem["terminated_date"], 
+                "service_provider": elem["service_provider"]
+            }
+        elif objects[elem["object"]]["service_provider"] != elem["service_provider"]:
+            if objects[elem["object"]]["activated_date"] < elem["activated_date"]:
+                objects[elem["object"]]["service_provider"] = elem["service_provider"]
+                objects[elem["object"]]["activated_date"] = elem["activated_date"]
+                objects[elem["object"]]["terminated_date"] = elem["terminated_date"]
+    return objects
 
 
 # first arg is the url, second arg is the apikey
@@ -41,15 +44,15 @@ objectsEnd = ordersToObjectsConverter(d2)
 
 
 for objectId in objectsStart.keys():
-	#At the end of the period, it’s no more part of the “active objects”.
-	if objectId not in objectsEnd.keys():
-		missingObjs += 1
-	#At the end of the period, it’s still active, but has a different service provider.
-	elif objectsEnd[objectId]["service_provider"] != objectsStart[objectId]["service_provider"]:
-		missingObjs += 1
+    # At the end of the period, it’s no more part of the “active objects”.
+    if objectId not in objectsEnd.keys():
+        missingObjs += 1
+    # At the end of the period, it’s still active, but has a different service provider.
+    elif objectsEnd[objectId]["service_provider"] != objectsStart[objectId]["service_provider"]:
+        missingObjs += 1
 
 
-#The churn rate it’s (missing active objects / total active objects at beginning) * 100
+# The churn rate it’s (missing active objects / total active objects at beginning) * 100
 rcr = missingObjs / len(objectsStart) * 100
 
 print("RCR is: ", rcr, "%")
